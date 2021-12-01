@@ -18,7 +18,10 @@
 package br.com.luisjustin.localsigner.utils;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
+import org.bouncycastle.util.io.TeeOutputStream;
 
 /**
  *
@@ -26,12 +29,51 @@ import java.io.PrintStream;
  */
 public class Logger {
 
-    public static void initLogger() {
-        File logFile = new File("");
-        logFile.delete();
-        logFile.createNewFile();
+    private String _errorLogPath = "/tmp/erro.log";
+    private String _outLogPath = "/tmp/out.log";
+    
+    public void initLogger() throws IOException {
         
-        System.setOut(new PrintStream(new TeeOutputStream()));
+        File errorLogFile = new File(this.getErrorLogPath());
+        File outLogFile = new File(this.getOutLogPath());
+        
+        errorLogFile.delete();
+        outLogFile.delete();
+        
+        errorLogFile.createNewFile();
+        outLogFile.createNewFile();
+        
+        System.setErr(new PrintStream(new TeeOutputStream(System.err, new FileOutputStream(errorLogFile)), true));
+        System.setOut(new PrintStream(new TeeOutputStream(System.out, new FileOutputStream(outLogFile)), true));
+        
+    }
+
+    /**
+     * @return the _errorLogPath
+     */
+    public String getErrorLogPath() {
+        return _errorLogPath;
+    }
+
+    /**
+     * @param _errorLogPath the _errorLogPath to set
+     */
+    public void setErrorLogPath(String _errorLogPath) {
+        this._errorLogPath = _errorLogPath;
+    }
+
+    /**
+     * @return the _outLogPath
+     */
+    public String getOutLogPath() {
+        return _outLogPath;
+    }
+
+    /**
+     * @param _outLogPath the _outLogPath to set
+     */
+    public void setOutLogPath(String _outLogPath) {
+        this._outLogPath = _outLogPath;
     }
     
 }

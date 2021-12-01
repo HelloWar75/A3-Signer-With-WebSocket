@@ -17,6 +17,8 @@
 
 package br.com.luisjustin.localsigner;
 
+import br.com.luisjustin.localsigner.utils.ConfigLoader;
+
 /**
  *
  * @author Luis Justin <contato@luisjustin.com.br>
@@ -31,6 +33,7 @@ public class Main {
         try {
             
             //Need init log system
+            System.out.println(ConfigLoader.geterrorLogPath());
             
         }catch( Exception ex ) {
             ex.printStackTrace();
