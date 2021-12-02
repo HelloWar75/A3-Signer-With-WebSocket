@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Date;
 import org.bouncycastle.util.io.TeeOutputStream;
 
 /**
@@ -28,14 +29,22 @@ import org.bouncycastle.util.io.TeeOutputStream;
  * @author Luis Justin <contato@luisjustin.com.br>
  */
 public class Logger {
-
-    private String _errorLogPath = "/tmp/erro.log";
-    private String _outLogPath = "/tmp/out.log";
     
     public void initLogger() throws IOException {
         
-        File errorLogFile = new File(this.getErrorLogPath());
-        File outLogFile = new File(this.getOutLogPath());
+        System.out.println("Initializing Logger");
+        
+        Date date = new Date();
+        Long actTime = date.getTime();
+        
+        ConfigLoader cl = ConfigLoader.getInstance();
+        
+        System.out.println("Set log system to paths: ");
+        System.out.println("Error Log File: " + cl.getErrorLogPath() + "-" + actTime.toString() + ".log");
+        System.out.println("Out Log File: " + cl.getOutLogPath() + "-" + actTime.toString() + ".log");
+        
+        File errorLogFile = new File(cl.getErrorLogPath() + "-" + actTime.toString() + ".log");
+        File outLogFile = new File(cl.getOutLogPath() + "-" + actTime.toString() + ".log");
         
         errorLogFile.delete();
         outLogFile.delete();
@@ -46,34 +55,6 @@ public class Logger {
         System.setErr(new PrintStream(new TeeOutputStream(System.err, new FileOutputStream(errorLogFile)), true));
         System.setOut(new PrintStream(new TeeOutputStream(System.out, new FileOutputStream(outLogFile)), true));
         
-    }
-
-    /**
-     * @return the _errorLogPath
-     */
-    public String getErrorLogPath() {
-        return _errorLogPath;
-    }
-
-    /**
-     * @param _errorLogPath the _errorLogPath to set
-     */
-    public void setErrorLogPath(String _errorLogPath) {
-        this._errorLogPath = _errorLogPath;
-    }
-
-    /**
-     * @return the _outLogPath
-     */
-    public String getOutLogPath() {
-        return _outLogPath;
-    }
-
-    /**
-     * @param _outLogPath the _outLogPath to set
-     */
-    public void setOutLogPath(String _outLogPath) {
-        this._outLogPath = _outLogPath;
     }
     
 }

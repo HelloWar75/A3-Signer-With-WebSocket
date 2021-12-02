@@ -29,36 +29,40 @@ import java.util.logging.Logger;
  */
 public class ConfigLoader {
     
-    public static String _configFilePath = "./config.properties";
-    public static String _appVersion = "0.0.1a";
-    public static FileInputStream _fileStream;
-    public static Properties _props = new Properties();
+    private static ConfigLoader instance = new ConfigLoader();
+    private static final String _configFilePath = "./config.properties";
+    private static String _appVersion = "0.0.1a";
+    private FileInputStream _fileStream;
+    private Properties _props;
     
     private ConfigLoader() {
+        
+        System.out.println("Initializing ConfigLoader");
+        
         try {
-            ConfigLoader._fileStream = new FileInputStream(ConfigLoader._configFilePath);
-            ConfigLoader._props.load(_fileStream);
-            ConfigLoader._fileStream.close();
+            this._fileStream = new FileInputStream(ConfigLoader._configFilePath);
+            this._props = new Properties();
+            this._props.load(_fileStream);
+            this._fileStream.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ConfigLoader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ConfigLoader.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
     
-    public static ConfigLoader getInstance() {
-        return ConfigLoaderHolder.INSTANCE;
+    public static synchronized ConfigLoader getInstance() {
+    
+        return instance;
+        
     }
     
-    private static class ConfigLoaderHolder {
-        private static final ConfigLoader INSTANCE = new ConfigLoader();
+    public String getErrorLogPath() {
+        return (String)this._props.getProperty("errorLogPath");
     }
     
-    public static String geterrorLogPath() {
-        return (String)ConfigLoader._props.getProperty("errorLogPath");
-    }
-    
-    public static String outLogPath() {
-        return (String)ConfigLoader._props.getProperty("outLogPath");
+    public String getOutLogPath() {
+        return (String)this._props.getProperty("outLogPath");
     }
 }

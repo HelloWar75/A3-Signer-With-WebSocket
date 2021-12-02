@@ -17,7 +17,7 @@
 
 package br.com.luisjustin.localsigner;
 
-import br.com.luisjustin.localsigner.utils.ConfigLoader;
+import br.com.luisjustin.localsigner.utils.Logger;
 
 /**
  *
@@ -33,7 +33,9 @@ public class Main {
         try {
             
             //Need init log system
-            System.out.println(ConfigLoader.geterrorLogPath());
+            Logger logger = new Logger();
+            logger.initLogger();
+            
             
         }catch( Exception ex ) {
             ex.printStackTrace();
